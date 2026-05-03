@@ -1,6 +1,8 @@
 window.AUTOLEAD_FIREBASE_CONFIG = {
   enabled: true,
   adminEmail: "tokerdanny53@gmail.com",
+  vapidKey: "",  // Firebase Console → Project Settings → Cloud Messaging → Web Push certificates → copy key pair
+
   firebaseConfig: {
     apiKey: "AIzaSyDVv_Qk_aF0-qsujnP1sLdnlGNw3pzNm00",
     authDomain: "autolead-app.firebaseapp.com",

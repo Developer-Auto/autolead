@@ -1,10 +1,40 @@
-const CACHE_NAME = "autolead-pwa-v8";
+// Firebase Messaging — handles push notifications when app is closed
+importScripts("https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.12.5/firebase-messaging-compat.js");
+
+firebase.initializeApp({
+  apiKey: "AIzaSyDVv_Qk_aF0-qsujnP1sLdnlGNw3pzNm00",
+  authDomain: "autolead-app.firebaseapp.com",
+  projectId: "autolead-app",
+  storageBucket: "autolead-app.firebasestorage.app",
+  messagingSenderId: "460106742616",
+  appId: "1:460106742616:web:df0dc59e9b624a00f2832d"
+});
+
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  const title = payload.notification?.title || "AutoLead";
+  const body  = payload.notification?.body  || "";
+  const link  = payload.fcmOptions?.link || "./";
+  return self.registration.showNotification(title, {
+    body,
+    icon:     "./assets/icon.svg",
+    badge:    "./assets/icon.svg",
+    tag:      "autolead-push",
+    renotify: true,
+    data:     { url: link }
+  });
+});
+
+// ─── Cache-first PWA shell ─────────────────────────────────────────────────────
+const CACHE_NAME = "autolead-pwa-v9";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js?v=8",
-  "./firebase-config.js?v=8",
+  "./app.js?v=9",
+  "./firebase-config.js?v=9",
   "./manifest.webmanifest",
   "./assets/icon.svg"
 ];
@@ -40,24 +70,6 @@ self.addEventListener("notificationclick", (event) => {
         if ("focus" in client) return client.focus();
       }
       if (self.clients.openWindow) return self.clients.openWindow(targetUrl);
-    })
-  );
-});
-
-// Stub for future Firebase Cloud Messaging push notifications
-// To enable: set up FCM in Firebase Console, add VAPID key, subscribe in app.js
-self.addEventListener("push", (event) => {
-  if (!event.data) return;
-  let payload;
-  try { payload = event.data.json(); } catch (_) { return; }
-  event.waitUntil(
-    self.registration.showNotification(payload.title || "AutoLead", {
-      body:   payload.body  || "",
-      icon:   "./assets/icon.svg",
-      badge:  "./assets/icon.svg",
-      tag:    payload.tag   || "autolead-push",
-      renotify: true,
-      data:   { url: "./" }
     })
   );
 });

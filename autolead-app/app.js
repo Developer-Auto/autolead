@@ -484,6 +484,7 @@ let selectedLoginRole = "business";
 let cloud = null;
 let cloudReady = null;
 let cloudUnsubscribers = [];
+let fcmMessaging = null;
 let reminderTimer = null;
 let reminderCheckTimer = null;
 let lastPendingCount = -1;
@@ -539,10 +540,37 @@ async function requestNotifPerm() {
     const result = await Notification.requestPermission();
     updateUserSettings({ notificationsEnabled: result === "granted" });
     toast(result === "granted" ? t("notifPermGranted") : t("notifPermDenied"));
+    if (result === "granted") registerFCMToken();
     return result;
   } catch (e) {
     console.error("Notification permission failed", e);
     return "error";
+  }
+}
+
+async function registerFCMToken() {
+  const cfg = window.AUTOLEAD_FIREBASE_CONFIG;
+  if (!cfg?.enabled || !cfg?.vapidKey) return;
+  if (notifPermStatus() !== "granted") return;
+  if (!("serviceWorker" in navigator)) return;
+  try {
+    const swReg = await navigator.serviceWorker.ready;
+    const { getMessaging, getToken } = await import(
+      "https://www.gstatic.com/firebasejs/10.12.5/firebase-messaging.js"
+    );
+    const api = await initCloud();
+    if (!api) return;
+    if (!fcmMessaging) fcmMessaging = getMessaging(api.app);
+    const token = await getToken(fcmMessaging, {
+      vapidKey: cfg.vapidKey,
+      serviceWorkerRegistration: swReg
+    });
+    if (token) {
+      const user = currentUser();
+      if (user) await cloudSetUser({ ...user, fcmToken: token });
+    }
+  } catch (e) {
+    console.warn("FCM token registration failed:", e.message);
   }
 }
 
@@ -721,7 +749,7 @@ async function initCloud() {
     const auth = authSdk.getAuth(firebaseApp);
     await authSdk.setPersistence(auth, authSdk.browserLocalPersistence);
     const db = dbSdk.getFirestore(firebaseApp);
-    cloud = { cfg, auth, db, authSdk, dbSdk };
+    cloud = { cfg, auth, db, authSdk, dbSdk, app: firebaseApp };
     return cloud;
   }).catch((err) => {
     console.error("Firebase init failed", err);
@@ -1748,6 +1776,7 @@ async function bootstrap() {
     currentUserId = state.sessionUserId;
   }
   render(); setupReminders(); checkMorningReminder();
+  if (notifPermStatus() === "granted") registerFCMToken();
 }
 
 // ─── EVENTS ───────────────────────────────────────────────────────────────────
