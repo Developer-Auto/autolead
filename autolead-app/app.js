@@ -880,12 +880,21 @@ function escapeHtml(v) {
   return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;")
     .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
-function toast(msg) {
+function toast(msg, action) {
   const node = document.createElement("div");
   node.className = "toast";
-  node.textContent = msg;
+  if (action) {
+    node.innerHTML = `<span>${escapeHtml(msg)}</span><button class="toast-undo-btn">${action.label}</button>`;
+    node.querySelector(".toast-undo-btn").addEventListener("click", () => {
+      action.fn();
+      node.remove();
+    });
+    setTimeout(() => node.remove(), 5000);
+  } else {
+    node.textContent = msg;
+    setTimeout(() => node.remove(), 3000);
+  }
   toastHost.appendChild(node);
-  setTimeout(() => node.remove(), 3000);
 }
 function waLink(lead) {
   const fn = whatsappTemplates[lead.status] || whatsappTemplates["חדש"];
@@ -936,6 +945,29 @@ function pipelineBar(leads) {
   const segs = statusLabels.filter((s) => counts[s] > 0)
     .map((s) => `<div class="pipeline-segment" style="background:${STATUS_COLORS[s]};flex:${counts[s]}"></div>`).join("");
   return `<div class="pipeline-bar">${segs}</div>`;
+}
+
+function exportLeadsCSV(leads) {
+  if (!leads.length) { toast("אין לידים לייצוא"); return; }
+  const headers = ["שם לקוח","טלפון","עיר","מקור","סטטוס","עדיפות","סכום הצעה","תאריך מעקב","הערות","תאריך הוספה"];
+  const rows = leads.map(l => [
+    l.customerName, l.phone, l.city || "",
+    SOURCE_TR[l.source]?.he || l.source || "",
+    STATUS_TR[l.status]?.he || l.status || "",
+    PRIORITY_TR[l.priority]?.he || l.priority || "",
+    l.quoteAmount || "",
+    l.nextFollowUpDate || "",
+    (l.notes || "").replace(/\n/g, " | "),
+    l.createdAt ? l.createdAt.slice(0,10) : ""
+  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(","));
+
+  const csv = "﻿" + [headers.join(","), ...rows].join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `autolead-לידים-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  toast("הקובץ הורד ✓");
 }
 
 function filterLeads(leads, filter) {
@@ -1075,8 +1107,17 @@ function bottomNav(user) {
     <nav class="bottom-nav">
       ${items.map(([view, iconHtml, label]) => {
         if (view === "add") return `<button class="nav-item nav-add" data-action="open-add"><span class="add-circle">${iconHtml}</span><span>${label}</span></button>`;
-        const badge = (view === "admin") && adminBadgeCount() > 0
-          ? `<span class="nav-badge">${adminBadgeCount()}</span>` : "";
+        let badge = "";
+        if (view === "admin" && adminBadgeCount() > 0) {
+          badge = `<span class="nav-badge">${adminBadgeCount()}</span>`;
+        } else if (view === "leads") {
+          const newCount = userLeads(user.uid).filter(l => l.status === "חדש").length;
+          if (newCount > 0) badge = `<span class="nav-badge nav-badge-blue">${newCount}</span>`;
+        } else if (view === "follow") {
+          const today = new Date().toISOString().slice(0,10);
+          const urgentCount = userLeads(user.uid).filter(l => needsFollowUp(l) && l.nextFollowUpDate <= today).length;
+          if (urgentCount > 0) badge = `<span class="nav-badge nav-badge-orange">${urgentCount}</span>`;
+        }
         return `<button class="nav-item ${activeView===view?"active":""}" data-view="${view}"><span class="nav-icon-wrap">${iconHtml}${badge}</span><span>${label}</span></button>`;
       }).join("")}
     </nav>`;
@@ -1142,7 +1183,15 @@ function leadsView(user) {
   const filters = [["all", t("filterAll")], ...statusLabels.map((s) => [s, tStatus(s)]), ["follow", t("filterFollow")]];
   const filtered = filterLeads(leads, activeFilter);
   return `
-    <section class="section-title"><h1>${t("leads")}</h1><p>${t("leadsSubtitle")}</p></section>
+    <section class="section-title">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <h1 style="margin:0">${t("leads")}</h1>
+        <button class="icon-button" data-action="export-leads" title="ייצוא לאקסל" aria-label="ייצוא לידים לאקסל">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+      </div>
+      <p>${t("leadsSubtitle")}</p>
+    </section>
     <div class="search-row">
       <input id="leadSearch" type="search" placeholder="${t("searchPlaceholder")}" />
       <button class="icon-button">${ic("search",18)}</button>
@@ -1498,6 +1547,10 @@ function updateLeadStatus(form) {
   const lead = state.leads.find((l) => l.id === activeLeadId);
   const data = new FormData(form);
   if (!lead) return;
+
+  // Snapshot for undo
+  const snapshot = { ...lead };
+
   const oldStatus = lead.status;
   lead.status = data.get("status");
   lead.quoteAmount = Number(data.get("quoteAmount")) || 0;
@@ -1515,7 +1568,22 @@ function updateLeadStatus(form) {
   saveState();
   cloudSetLead(lead).catch((e) => console.error(e));
   closeSheet(); render();
-  toast(t("statusUpdated"));
+
+  // Undo action when status actually changed
+  if (oldStatus !== lead.status) {
+    toast(t("statusUpdated"), {
+      label: "בטל",
+      fn: () => {
+        Object.assign(lead, snapshot);
+        state.activities = (state.activities || []).filter(a => a.text !== actText || a.leadId !== lead.id);
+        saveState();
+        cloudSetLead(lead).catch(() => {});
+        render();
+      }
+    });
+  } else {
+    toast(t("statusUpdated"));
+  }
 }
 
 function login(type) {
@@ -1713,6 +1781,7 @@ document.addEventListener("click", (e) => {
   if (action==="support-user")    supportUser(target.dataset.userId);
   if (action==="remove-user")     removeUser(target.dataset.userId);
   if (action==="install")         handleInstall();
+  if (action==="export-leads") { const user=currentUser(); if(user) exportLeadsCSV(userLeads(user.uid)); }
   if (action==="request-notif-permission") requestNotifPerm();
   if (action==="test-notif") {
     const user = currentUser();

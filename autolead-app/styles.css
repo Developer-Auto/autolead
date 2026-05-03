@@ -669,6 +669,9 @@ input:focus, select:focus, textarea:focus {
   pointer-events: none;
 }
 
+.nav-badge-blue   { background: var(--s-new) !important; }
+.nav-badge-orange { background: var(--s-waiting) !important; }
+
 .nav-add { transform: translateY(-20px); }
 
 .nav-add .add-circle {
@@ -931,16 +934,36 @@ input:focus, select:focus, textarea:focus {
 }
 
 .toast {
-  max-width: 290px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 310px;
   padding: 11px 14px;
   color: #ffffff;
   background: #1e293b;
   border-radius: 14px;
   box-shadow: 0 8px 28px rgba(15, 23, 42, 0.25);
   font-size: 0.87rem;
-  font-weight: 800;
+  font-weight: 600;
   animation: fade-in 200ms ease both;
+  pointer-events: all;
 }
+
+.toast-undo-btn {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.toast-undo-btn:hover { background: rgba(255,255,255,0.28); }
 
 /* ═══ ADMIN ═══ */
 .admin-user-card {
