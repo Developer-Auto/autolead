@@ -379,28 +379,30 @@ body.dark-mode .button.secondary {
   color: #fff;
 }
 
+/* CSS-only animation — no JS dependency, renders instantly */
+@keyframes lineReveal {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .hero-line {
   display: block;
   opacity: 0;
-  transform: translateY(48px);
-  transition: opacity 0.75s cubic-bezier(0.25, 1, 0.5, 1),
-              transform 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+  animation: lineReveal 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
-.hero-line.line-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+.hero-line:nth-child(1) { animation-delay: 0.15s; }
+.hero-line:nth-child(2) { animation-delay: 0.3s; }
+.hero-line:nth-child(3) { animation-delay: 0.45s; }
 
-.hero-line:nth-child(1) { transition-delay: 0.05s; }
-.hero-line:nth-child(2) { transition-delay: 0.2s; }
-.hero-line:nth-child(3) { transition-delay: 0.35s; }
+/* Keep .line-visible for JS enhancement (no-op since CSS handles it) */
+.hero-line.line-visible { opacity: 1; transform: translateY(0); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-line {
     opacity: 1;
     transform: none;
-    transition: none;
+    animation: none;
   }
   .hero-video {
     animation: none;
@@ -2158,15 +2160,33 @@ label { color: rgba(255,255,255,0.8); }
 .footer-links a { color: rgba(255,255,255,0.45); }
 .footer-links a:hover { color: var(--teal); }
 
-/* ─── GSAP will-change optimization ─────────────────────────── */
-.hero-headline,
-.hero-copy,
-.hero-actions,
-.hero-metrics,
-.hero-visual,
-.bento-card,
-.price-card,
-.steps li,
-[data-reveal] {
-  will-change: transform, opacity;
+/* ─── WhatsApp floating button ───────────────────────────────── */
+.wa-float {
+  position: fixed;
+  bottom: 28px;
+  inset-inline-start: 28px;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  background: #25D366;
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 6px 28px rgba(37, 211, 102, 0.45);
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 200ms ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.wa-float:hover {
+  transform: scale(1.12);
+  box-shadow: 0 10px 36px rgba(37, 211, 102, 0.6);
+}
+
+.wa-float:active { transform: scale(0.95); }
+
+@media (max-width: 480px) {
+  .wa-float { bottom: 20px; inset-inline-start: 16px; width: 52px; height: 52px; }
 }
