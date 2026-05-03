@@ -1,0 +1,20 @@
+# Build artifacts
+*.zip
+
+# Screenshots / test images
+*.png
+*.jpeg
+*.jpg
+!assets/**
+
+# Claude Code internals
+.claude/
+.agent/
+.playwright-mcp/
+
+# Node
+node_modules/
+
+# Windows
+Thumbs.db
+desktop.ini

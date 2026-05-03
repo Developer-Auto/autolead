@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <meta
+      name="description"
+      content="AutoLead היא אפליקציית PWA לניהול לידים, מעקבים, מנויים ולקוחות לעסקים קטנים."
+    />
+    <title>AutoLead App</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell"></div>
+    <div id="toastHost" class="toast-host" aria-live="polite"></div>
+
+    <template id="iconTemplate">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v13A2.5 2.5 0 0 1 17.5 21h-11A2.5 2.5 0 0 1 4 18.5v-13Zm2.5-.6a.6.6 0 0 0-.6.6v13c0 .33.27.6.6.6h11a.6.6 0 0 0 .6-.6v-13a.6.6 0 0 0-.6-.6h-11ZM8 7h8v1.8H8V7Zm0 4h8v1.8H8V11Zm0 4h5v1.8H8V15Z"/>
+      </svg>
+    </template>
+
+    <script src="firebase-config.js?v=6"></script>
+    <script src="app.js?v=6"></script>
+  </body>
+</html>
