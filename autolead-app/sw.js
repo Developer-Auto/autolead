@@ -1,10 +1,10 @@
-const CACHE_NAME = "autolead-pwa-v6";
+const CACHE_NAME = "autolead-pwa-v7";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js?v=6",
-  "./firebase-config.js?v=6",
+  "./app.js?v=7",
+  "./firebase-config.js?v=7",
   "./manifest.webmanifest",
   "./assets/icon.svg"
 ];
