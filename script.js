@@ -426,7 +426,7 @@ const applyLanguage = (language) => {
   setText("#service .section-kicker", t.serviceKicker);
   setText("#service h2", t.serviceTitle);
   setText("#service > div:first-child p:not(.section-kicker)", t.serviceCopy);
-  document.querySelectorAll(".feature-card").forEach((card, index) => {
+  document.querySelectorAll(".bento-card").forEach((card, index) => {
     const feature = t.features[index];
     if (!feature) return;
     card.querySelector("h3").textContent = feature[0];
