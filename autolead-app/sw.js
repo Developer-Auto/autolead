@@ -1,13 +1,13 @@
 // OneSignal — handles background push when app is closed
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-const CACHE_NAME = "autolead-pwa-v10";
+const CACHE_NAME = "autolead-pwa-v11";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js?v=10",
-  "./firebase-config.js?v=10",
+  "./app.js?v=11",
+  "./firebase-config.js?v=11",
   "./manifest.webmanifest",
   "./assets/icon.svg"
 ];
