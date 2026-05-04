@@ -2248,3 +2248,23 @@ label { color: rgba(255,255,255,0.8); }
   line-height: 1.7;
   font-size: 0.95rem;
 }
+
+/* ─── Cursor trail ─────────────────────────────────────────────── */
+.cursor-trail {
+  position: fixed;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34,211,197,1) 0%, rgba(34,211,197,0) 100%);
+  pointer-events: none;
+  z-index: 9997;
+  transform: translate(-50%, -50%) scale(1);
+  animation: trailFade 0.55s ease-out forwards;
+}
+
+@keyframes trailFade {
+  0%   { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(0.1); }
+}
+
+@media (prefers-reduced-motion: reduce) { .cursor-trail { display: none; } }

@@ -800,6 +800,20 @@ updateThemeText();
       el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
     });
 
+    // Cursor trail
+    let lastTrail = 0;
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastTrail < 35) return;
+      lastTrail = now;
+      const t = document.createElement('div');
+      t.className = 'cursor-trail';
+      t.style.left = e.clientX + 'px';
+      t.style.top  = e.clientY + 'px';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 580);
+    }, { passive: true });
+
     // Hide cursor when leaving window
     document.addEventListener('mouseleave', () => {
       dot.style.opacity = '0';
