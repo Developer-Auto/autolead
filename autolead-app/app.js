@@ -1222,6 +1222,43 @@ function followView(user) {
     ${!leads.length ? emptyState(ic("check",28), t("emptyFollowTitle"), t("emptyFollowBody"), "") : ""}`;
 }
 
+function formatReminderInterval(minutes) {
+  const lang = state.language || "he";
+  const m = Number(minutes);
+  const h = m / 60;
+  const isWhole = Number.isInteger(h);
+
+  if (lang === "he") {
+    if (m === 30)  return "כל חצי שעה";
+    if (m === 60)  return "כל שעה";
+    if (m === 90)  return "כל שעה וחצי";
+    if (m === 120) return "כל שעתיים";
+    if (isWhole)   return `כל ${h} שעות`;
+    return `כל ${h} שעות`;
+  }
+  if (lang === "ru") {
+    if (m === 30)  return "Каждые 30 мин";
+    if (m === 60)  return "Каждый час";
+    if (m < 60)    return `Каждые ${m} мин`;
+    if (isWhole)   return h === 1 ? "Каждый час" : `Каждые ${h} ${h < 5 ? "часа" : "часов"}`;
+    return `Каждые ${h} часа`;
+  }
+  // en
+  if (m < 60)    return `Every ${m} min`;
+  if (m === 60)  return "Every 1 hour";
+  if (isWhole)   return `Every ${h} hours`;
+  return `Every ${h} hours`;
+}
+
+function reminderIntervalOptions(selected) {
+  const sel = String(selected || "60");
+  let html = "";
+  for (let m = 30; m <= 1440; m += 30) {
+    html += `<option value="${m}"${sel === String(m) ? " selected" : ""}>${formatReminderInterval(m)}</option>`;
+  }
+  return html;
+}
+
 function settingsView(user) {
   const s = user.settings || {};
   const remindersEnabled = s.remindersEnabled ?? false;
@@ -1263,9 +1300,7 @@ function settingsView(user) {
         <div class="field">
           <label>${t("reminderIntervalLabel")}</label>
           <select data-action="change-reminder-interval">
-            <option value="30"  ${reminderInterval === "30"  ? "selected" : ""}>${t("reminder30")}</option>
-            <option value="60"  ${reminderInterval === "60"  ? "selected" : ""}>${t("reminder60")}</option>
-            <option value="120" ${reminderInterval === "120" ? "selected" : ""}>${t("reminder120")}</option>
+            ${reminderIntervalOptions(reminderInterval)}
           </select>
         </div>` : ""}
         <hr style="border:0;border-top:1px solid var(--line);margin:2px 0">
