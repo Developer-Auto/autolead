@@ -15,6 +15,24 @@
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://developer-auto.github.io/autolead/assets/autolead-logo-square.svg" />
     <meta name="robots" content="index, follow" />
+    <!-- Google Analytics — replace G-XXXXXXXXXX after creating property at analytics.google.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <!-- Facebook Pixel — replace YOUR_PIXEL_ID after creating pixel at business.facebook.com/events/manager -->
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init','YOUR_PIXEL_ID');
+      fbq('track','PageView');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
@@ -47,6 +65,7 @@
         <a href="#demo">דמו</a>
         <a href="#packages">חבילות</a>
         <a href="#process">תהליך</a>
+        <a href="#faq">שאלות</a>
         <a href="#contact">דברו איתי</a>
       </nav>
       <div class="header-controls">
@@ -531,6 +550,40 @@
             <p>מפעילים, בודקים, ומכוונים את ההודעות לפי תגובות אמיתיות.</p>
           </li>
         </ol>
+      </section>
+
+      <!-- ─── FAQ ─── -->
+      <section class="section faq-section" id="faq" data-reveal>
+        <div class="section-heading">
+          <p class="section-kicker">שאלות נפוצות</p>
+          <h2>כל מה שרצית לדעת</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary class="faq-question">כמה זמן לוקח ההגדרה?</summary>
+            <div class="faq-answer">שבוע אחד. אני מגדיר הכל בשבילך — מטפסים, וואטסאפ, מעקבים. ב-7 ימים יש לך מערכת עובדת.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">צריך לשנות את הוואטסאפ שלי?</summary>
+            <div class="faq-answer">לא. עובד עם הוואטסאפ הנוכחי שלך. לא חייבים WhatsApp Business.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">מה אם לא מרוצה?</summary>
+            <div class="faq-answer">ביטול בכל רגע, ללא קנסות ובלי שאלות. ללא התחייבות.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">צריך ידע טכני?</summary>
+            <div class="faq-answer">בכלל לא. אתה מספר לי איך העסק עובד — אני בונה הכל. אתה רק מתחיל לראות לידים מסודרים.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">האם יש הגבלה על מספר הלידים?</summary>
+            <div class="faq-answer">אין הגבלה. כמה לידים שיבואו — המערכת מטפלת בהם.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">האם הנתונים שלי בטוחים?</summary>
+            <div class="faq-answer">כן. כל המידע מוצפן ומאובטח בשרתי Google. אף אחד אחר לא רואה את הלידים שלך.</div>
+          </details>
+        </div>
       </section>
 
       <!-- ─── CONTACT / FINAL CTA ─── -->

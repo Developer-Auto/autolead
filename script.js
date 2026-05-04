@@ -15,7 +15,7 @@ const translations = {
     navContact: "דברו איתי",
     themeDark: "מצב לילה",
     themeLight: "מצב יום",
-    headerAction: "אבחון חינם",
+    headerAction: "התחל בחינם",
     appAction: "פתח אפליקציה",
     eyebrow: "אוטומציות לעסקים שמקבלים לידים",
     heroLine1: "מערכת חכמה",
@@ -119,6 +119,17 @@ const translations = {
     whatsappDefault: "היי, אני רוצה לבדוק התאמה למערכת אוטומציה ללידים ומכירות.",
     whatsappIntro: "היי, אשמח לבדוק התאמה למערכת אוטומציה.",
     whatsappFields: ["שם", "תחום העסק", "טלפון", "מה דחוף לשפר"],
+    navFaq: "שאלות",
+    faqKicker: "שאלות נפוצות",
+    faqTitle: "כל מה שרצית לדעת",
+    faqs: [
+      ["כמה זמן לוקח ההגדרה?", "שבוע אחד. אני מגדיר הכל בשבילך — מטפסים, וואטסאפ, מעקבים. ב-7 ימים יש לך מערכת עובדת."],
+      ["צריך לשנות את הוואטסאפ שלי?", "לא. עובד עם הוואטסאפ הנוכחי שלך. לא חייבים WhatsApp Business."],
+      ["מה אם לא מרוצה?", "ביטול בכל רגע, ללא קנסות ובלי שאלות. ללא התחייבות."],
+      ["צריך ידע טכני?", "בכלל לא. אתה מספר לי איך העסק עובד — אני בונה הכל. אתה רק מתחיל לראות לידים מסודרים."],
+      ["האם יש הגבלה על מספר הלידים?", "אין הגבלה. כמה לידים שיבואו — המערכת מטפלת בהם."],
+      ["האם הנתונים שלי בטוחים?", "כן. כל המידע מוצפן ומאובטח בשרתי Google. אף אחד אחר לא רואה את הלידים שלך."],
+    ],
   },
   en: {
     dir: "ltr",
@@ -134,7 +145,7 @@ const translations = {
     navContact: "Contact",
     themeDark: "Dark mode",
     themeLight: "Light mode",
-    headerAction: "Free audit",
+    headerAction: "Start free",
     appAction: "Open app",
     eyebrow: "Automation for businesses that receive leads",
     heroLine1: "Smart System",
@@ -238,6 +249,17 @@ const translations = {
     whatsappDefault: "Hi, I want to check fit for a lead and sales automation system.",
     whatsappIntro: "Hi, I would like to check fit for an automation system.",
     whatsappFields: ["Name", "Business field", "Phone", "Most urgent improvement"],
+    navFaq: "FAQ",
+    faqKicker: "Common questions",
+    faqTitle: "Everything you wanted to know",
+    faqs: [
+      ["How long does setup take?", "One week. I handle everything — forms, WhatsApp, follow-ups. In 7 days you have a working system."],
+      ["Do I need to change my WhatsApp?", "No. Works with your current WhatsApp. WhatsApp Business is not required."],
+      ["What if I'm not satisfied?", "Cancel anytime, no penalties, no questions. No commitment."],
+      ["Do I need technical knowledge?", "Not at all. You tell me how your business works — I build everything. You just start seeing organized leads."],
+      ["Is there a limit on leads?", "No limit. However many leads come in — the system handles them."],
+      ["Is my data secure?", "Yes. All data is encrypted and secured on Google servers. No one else sees your leads."],
+    ],
   },
   ru: {
     dir: "ltr",
@@ -253,7 +275,7 @@ const translations = {
     navContact: "Контакт",
     themeDark: "Темная тема",
     themeLight: "Светлая тема",
-    headerAction: "Бесплатный аудит",
+    headerAction: "Начать бесплатно",
     appAction: "Открыть приложение",
     eyebrow: "Автоматизация для бизнесов, которые получают лиды",
     heroLine1: "Умная система",
@@ -357,6 +379,17 @@ const translations = {
     whatsappDefault: "Здравствуйте, хочу проверить подходит ли система автоматизации лидов и продаж.",
     whatsappIntro: "Здравствуйте, хочу проверить подходит ли система автоматизации.",
     whatsappFields: ["Имя", "Сфера бизнеса", "Телефон", "Что важно улучшить"],
+    navFaq: "Вопросы",
+    faqKicker: "Частые вопросы",
+    faqTitle: "Всё, что хотели знать",
+    faqs: [
+      ["Сколько времени займет настройка?", "Одна неделя. Я настраиваю всё — формы, WhatsApp, напоминания. За 7 дней у вас работающая система."],
+      ["Нужно менять WhatsApp?", "Нет. Работает с вашим текущим WhatsApp. WhatsApp Business не обязателен."],
+      ["Что если я не доволен?", "Отмена в любое время, без штрафов и вопросов. Никаких обязательств."],
+      ["Нужны технические знания?", "Совсем нет. Вы рассказываете, как работает бизнес — я строю всё. Вы просто начинаете видеть упорядоченных лидов."],
+      ["Есть ли ограничение на количество лидов?", "Нет ограничений. Сколько бы лидов ни пришло — система справится."],
+      ["Мои данные в безопасности?", "Да. Все данные зашифрованы и защищены на серверах Google. Никто другой не видит ваших лидов."],
+    ],
   },
 };
 
@@ -391,7 +424,7 @@ const applyLanguage = (language) => {
   document.querySelector('meta[name="description"]').setAttribute("content", t.description);
 
   setText(".brand span", t.brand);
-  setAllText(".nav a", [t.navService, t.navDemo, t.navPackages, t.navProcess, t.navContact]);
+  setAllText(".nav a", [t.navService, t.navDemo, t.navPackages, t.navProcess, t.navFaq, t.navContact]);
   setText(".header-action", t.headerAction);
   setText(".app-action", t.appAction);
   setText(".theme-text", document.body.classList.contains("dark-mode") ? t.themeLight : t.themeDark);
@@ -525,6 +558,17 @@ const applyLanguage = (language) => {
   if (footerBrand) footerBrand.textContent = t.brand;
   const footerText = document.querySelector(".footer-brand span");
   if (footerText) footerText.textContent = t.footer;
+
+  setText("#faq .section-kicker", t.faqKicker);
+  setText("#faq h2", t.faqTitle);
+  document.querySelectorAll(".faq-item").forEach((item, i) => {
+    const faq = t.faqs?.[i];
+    if (!faq) return;
+    const q = item.querySelector(".faq-question");
+    const a = item.querySelector(".faq-answer");
+    if (q) q.textContent = faq[0];
+    if (a) a.textContent = faq[1];
+  });
 
   updateWhatsappLinks();
 };
