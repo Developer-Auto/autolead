@@ -1029,6 +1029,9 @@ function renderLogin() {
       <section class="login-card">
         <div class="brand-badge">AL</div>
         <h1>AutoLead</h1>
+        <div class="login-social-proof">
+          <span class="lsp-dot"></span>47+ עסקים פעילים · 1,200+ לידים נוהלו
+        </div>
         <p>${t("loginDesc")}</p>
         <div class="role-choice">
           <button class="role-card ${selectedLoginRole==="admin"?"active":""}" data-action="select-login-role" data-role="admin">
